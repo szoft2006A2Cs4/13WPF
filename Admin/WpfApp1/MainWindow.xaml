@@ -19,13 +19,13 @@
             <RowDefinition Height="8*"/>
         </Grid.RowDefinitions>
 
-        <Grid x:Name="Head" Grid.Row="0" Background="#969696">
+        <Grid x:Name="Head" Grid.Row="0" Background="#31393C">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <Label Content="ADMIN" VerticalAlignment="Center" Grid.Column="0"/>
+            <Label Content="ADMIN" Foreground="White" VerticalAlignment="Center" Grid.Column="0"/>
 
             <Grid Grid.Column="1">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
@@ -62,7 +62,7 @@
 
         </Grid>
 
-        <Grid x:Name="Nav" Grid.Row="1">
+        <Grid x:Name="Nav" Grid.Row="1" Background="#5BBA6F">
             <ListBox>
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -76,7 +76,7 @@
             </ListBox>
         </Grid>
 
-        <Grid x:Name="Body" Grid.Row="2">
+        <Grid x:Name="Body" Grid.Row="2" Background="#FDFFFF">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="2.5*"/>

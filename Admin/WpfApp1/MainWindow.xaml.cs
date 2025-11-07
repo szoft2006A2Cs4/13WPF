@@ -30,7 +30,7 @@ namespace WpfApp1
     /// </summary>
     public partial class MainWindow : Window
     {
-        const string _conn = "server=localhost;port=3306;uid=root;pwd=;database=hasznalthangszerek";
+        const string _conn = "server=localhost;port=3307;uid=root;pwd=;database=hasznalthangszerek";
         List<object> users = new List<object>();
         List<object> orders = new List<object>();
         List<object> instruments = new List<object>();
@@ -144,9 +144,11 @@ namespace WpfApp1
         {
 
             listbox.ItemsSource = listtype;
+            listbox.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
             listbox.SelectionChanged += CreateListBoxItemField;
 
             Body.Children.Add(listbox);
+            
         }
         private void Refresh()
         {
