@@ -22,6 +22,7 @@ using WpfApp1.Model;
 using System.Reflection;
 using OpenTK.Graphics.OpenGL;
 using ScottPlot.Plottables;
+using System.Security.Policy;
 
 namespace WpfApp1
 {
@@ -30,12 +31,13 @@ namespace WpfApp1
     /// </summary>
     public partial class MainWindow : Window
     {
-        const string _conn = "server=localhost;port=3307;uid=root;pwd=;database=hasznalthangszerek";
+        const string _conn = "server=localhost;port=3306;uid=root;pwd=;database=hasznalthangszerek";
         List<object> users = new List<object>();
         List<object> orders = new List<object>();
         List<object> instruments = new List<object>();
         ListBox listbox = new ListBox();
         StackPanel field;
+        System.Windows.Controls.Image image;
         object selectedItem;
 
         public MainWindow()
@@ -145,8 +147,15 @@ namespace WpfApp1
 
             listbox.ItemsSource = listtype;
             listbox.HorizontalContentAlignment = System.Windows.HorizontalAlignment.Center;
+            listbox.Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(46, 37, 50));
+            listbox.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(122, 182, 220));
+            listbox.BorderBrush = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0, 0, 0, 0));
             listbox.SelectionChanged += CreateListBoxItemField;
 
+            image = new System.Windows.Controls.Image();
+            image.Source = new BitmapImage(new Uri(@"pics/kep.png", UriKind.RelativeOrAbsolute));
+            Grid.SetColumn(image, 1);
+            Body.Children.Add(image);
             Body.Children.Add(listbox);
             
         }
@@ -157,6 +166,7 @@ namespace WpfApp1
         private void CreateListBoxItemField(object sender, SelectionChangedEventArgs e)
         {
             Body.Children.Remove(field);
+            Body.Children.Remove(image);
             field = new StackPanel();
             selectedItem =  listbox.SelectedItem;
 
@@ -172,11 +182,11 @@ namespace WpfApp1
 
                 grid.ColumnDefinitions.Add(new ColumnDefinition 
                 { 
-                    Width = GridLength.Auto
+                    Width = new GridLength(1, GridUnitType.Star)
                 });
                 grid.ColumnDefinitions.Add(new ColumnDefinition 
                 { 
-                    Width = new GridLength(1, GridUnitType.Star)
+                    Width = new GridLength(2, GridUnitType.Star)
                 });
 
                 grid.RowDefinitions.Add(new RowDefinition{
@@ -192,37 +202,58 @@ namespace WpfApp1
                 label.VerticalAlignment = System.Windows.VerticalAlignment.Center;
                 Grid.SetColumn(label, 0);
                 Grid.SetRow(label, 0);
-                label.HorizontalAlignment = System.Windows.HorizontalAlignment.Center;
+                label.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+                label.Foreground = new SolidColorBrush(System.Windows.Media.Colors.White);
 
                 TextBox textbox = new TextBox();
                 textbox.BorderBrush = Brushes.Transparent;
                 textbox.Background = Brushes.Transparent;
-                textbox.Width = 120;
+                textbox.Width = double.NaN;
                 textbox.Text = property.GetValue(selectedItem).ToString();
                 Grid.SetColumn(textbox, 1);
                 Grid.SetRow(textbox, 0);
+                textbox.VerticalAlignment = System.Windows.VerticalAlignment.Center;
                 textbox.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+                textbox.Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(122, 182, 220));
 
                 grid.Children.Add(label);
                 grid.Children.Add(textbox);
                 field.Children.Add(grid);
             }
 
-            Button Modify = new Button();
-            Grid.SetRow(Modify, 1);
-            Modify.Width = 100;
-            Modify.Content = "Módosítás";
-            Modify.AddHandler(Button.ClickEvent, new RoutedEventHandler(btnModify_Click), true);
-            field.Children.Add(Modify);
+            if (selectedItem.GetType() == new User().GetType())
+            {
+                Separator separator = new Separator();
+                Grid.SetRow(separator, 1);
+                separator.Height = 20;
+                separator.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0, 0, 0, 0));
+                field.Children.Add(separator);
 
-            Button Remove = new Button();
-            Grid.SetRow(Remove, 1);
-            Remove.Width = 100;
-            Remove.Content = "Törlés";
-            Remove.AddHandler(Button.ClickEvent, new RoutedEventHandler(btnRemove_Click), true);
-            field.Children.Add(Remove);
+                Button Modify = new Button();
+                Grid.SetRow(Modify, 1);
+                Modify.Width = 100;
+                Modify.Content = "Módosítás";
+                Modify.AddHandler(Button.ClickEvent, new RoutedEventHandler(btnModify_Click), true);
+                Modify.SetResourceReference(Button.StyleProperty, "BtnStyle");
+                field.Children.Add(Modify);
 
-            Button Create = new Button();
+                Separator separator1 = new Separator();
+                Grid.SetRow(separator1, 1);
+                separator1.Height = 25;
+                separator1.Background = new SolidColorBrush(System.Windows.Media.Color.FromArgb(0,0,0,0));
+                field.Children.Add(separator1);
+
+                Button Remove = new Button();
+                Grid.SetRow(Remove, 1);
+                Remove.Width = 100;
+                Remove.Content = "Törlés";
+                Remove.AddHandler(Button.ClickEvent, new RoutedEventHandler(btnRemove_Click), true);
+                Remove.SetResourceReference(Button.StyleProperty, "BtnStyle");
+                field.Children.Add(Remove);
+            }
+
+
+            //Button Create = new Button();
 
             Grid.SetColumn(field, 1);
             Body.Children.Add(field);
